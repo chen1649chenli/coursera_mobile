@@ -28,7 +28,7 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers','conFusion.service
     url: '/app',
     abstract: true,
     templateUrl: 'templates/sidebar.html',
-    controller: ''
+    controller: 'AppCtrl'
   })
 
   .state('app.home', {
@@ -78,7 +78,8 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers','conFusion.service
         controller: 'DishDetailController'
       }
     }
-  });
+  })
+;
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/home');
