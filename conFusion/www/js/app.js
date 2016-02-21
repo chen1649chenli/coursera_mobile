@@ -37,7 +37,7 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers','conFusion.service
   $rootScope.$on('$stateChangeSuccess', function () {
       console.log('done');
       $rootScope.$broadcast('loading:hide');
-  });  
+  });
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -55,22 +55,38 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers','conFusion.service
     views: {
       'mainContent': {
         templateUrl: 'templates/home.html',
-        controller: 'IndexController'
+        controller: 'IndexController',
+        resolve:{
+          dish:  ['menuFactory', function(menuFactory){
+            return menuFactory.get({id:0});
+          }],
+          promotion:  ['promotionFactory', function(promotionFactory){
+            return promotionFactory.get({id:0});
+          }],
+          leader:    ['corporateFactory', function(corporateFactory){
+            return corporateFactory.get({id:0});
+          }]
+        }
       }
     }
   })
 
-  .state('app.aboutus', {
+.state('app.aboutus', {
       url: '/aboutus',
       views: {
         'mainContent': {
           templateUrl: 'templates/aboutus.html',
-          controller: 'AboutController'
+          controller: 'AboutController',
+          resolve:{
+            leaders:  ['corporateFactory', function(corporateFactory){
+              return corporateFactory.query();
+            }]
+          }
         }
       }
     })
 
-   .state('app.contactus', {
+ .state('app.contactus', {
       url: '/contactus',
       views: {
         'mainContent': {
@@ -78,13 +94,17 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers','conFusion.service
         }
       }
     })
-
-    .state('app.menu', {
+ .state('app.menu', {
       url: '/menu',
       views: {
         'mainContent': {
           templateUrl: 'templates/menu.html',
-          controller: 'MenuController'
+          controller: 'MenuController',
+          resolve: {
+              dishes:  ['menuFactory', function(menuFactory){
+                return menuFactory.query();
+              }]
+            }
         }
       }
     })
@@ -94,12 +114,12 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers','conFusion.service
        views: {
          'mainContent': {
            templateUrl: 'templates/favorites.html',
-             controller:'FavoritesController',
+           controller:'FavoritesController',
            resolve: {
                dishes:  ['menuFactory', function(menuFactory){
                  return menuFactory.query();
                }],
-                             favorites: ['favoriteFactory', function(favoriteFactory) {
+              favorites: ['favoriteFactory', function(favoriteFactory) {
                    return favoriteFactory.getFavorites();
                }]
            }

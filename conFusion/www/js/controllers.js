@@ -43,8 +43,8 @@ angular.module('conFusion.controllers', [])
   $scope.login = function() {
     $scope.modal.show();
   };
-  
-$scope.loginData = $localStorage.getObject('userinfo','{}');
+
+ $scope.loginData = $localStorage.getObject('userinfo','{}');
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
     console.log('Doing login', $scope.loginData);
@@ -85,7 +85,7 @@ $scope.loginData = $localStorage.getObject('userinfo','{}');
   };
 })
 
-.controller('MenuController', ['$scope', 'menuFactory', 'favoriteFactory', 'baseURL', '$ionicListDelegate', function ($scope, menuFactory, favoriteFactory, baseURL, $ionicListDelegate) {
+.controller('MenuController', ['$scope', 'dishes', 'favoriteFactory', 'baseURL', '$ionicListDelegate', function ($scope, dishes, favoriteFactory, baseURL, $ionicListDelegate) {
 
     $scope.baseURL = baseURL;
     $scope.tab = 1;
@@ -94,14 +94,7 @@ $scope.loginData = $localStorage.getObject('userinfo','{}');
     $scope.showMenu = false;
     $scope.message = "Loading ...";
 
-    menuFactory.query(
-        function(response) {
-            $scope.dishes = response;
-            $scope.showMenu = true;
-        },
-        function(response) {
-            $scope.message = "Error: "+response.status + " " + response.statusText;
-        });
+    $scope.dishes = dishes;
 
 
     $scope.select = function(setTab) {
@@ -252,38 +245,22 @@ $scope.loginData = $localStorage.getObject('userinfo','{}');
 }])
 
 // implement the IndexController and About Controller here
-.controller('IndexController', ['$scope', 'menuFactory', 'promotionFactory', 'corporateFactory', 'baseURL', function ($scope, menuFactory, promotionFactory, corporateFactory, baseURL) {
+.controller('IndexController', ['$scope', 'dish','promotion','leader','baseURL', function ($scope, dish, promotion, leader, baseURL) {
 
     $scope.baseURL = baseURL;
-    $scope.leader = corporateFactory.get({
-        id: 3
-    });
+    $scope.leader = leader;
 
     $scope.showDish = false;
     $scope.message = "Loading ...";
 
-    $scope.dish = menuFactory.get({
-            id: 0
-        })
-        .$promise.then(
-            function (response) {
-                $scope.dish = response;
-                $scope.showDish = true;
-            },
-            function (response) {
-                $scope.message = "Error: " + response.status + " " + response.statusText;
-            }
-        );
-
-    $scope.promotion = promotionFactory.get({
-        id: 0
-    });
+    $scope.dish = dish;
+    $scope.promotion = promotion;
 
 }])
 
-.controller('AboutController', ['$scope', 'corporateFactory', 'baseURL', function($scope, corporateFactory, baseURL) {
+.controller('AboutController', ['$scope', 'leaders', 'baseURL', function($scope, leaders, baseURL) {
             $scope.baseURL = baseURL;
-            $scope.leaders = corporateFactory.query();
+            $scope.leaders = leaders;
 
           /*  menuFactory.query(
                 function(response) {
@@ -299,7 +276,7 @@ $scope.loginData = $localStorage.getObject('userinfo','{}');
             }])
 //Implement favorite menu controller
 
-.controller('FavoritesController', ['$scope', 'dishes', 'favorites', 'favoriteFactory', 'baseURL', '$ionicListDelegate', '$ionicPopup', '$ionicLoading', '$timeout', function ($scope, dishes, favorites, favoriteFactory, baseURL, $ionicListDelegate, $ionicPopup, $ionicLoading, $timeout) {
+.controller('FavoritesController', ['$scope', 'dishes', 'favorites', 'favoriteFactory', 'baseURL', '$ionicListDelegate', '$ionicPopup', '$ionicLoading', '$timeout',function ($scope, dishes, favorites, favoriteFactory, baseURL, $ionicListDelegate, $ionicPopup, $ionicLoading, $timeout) {
               $scope.baseURL = baseURL;
               $scope.shouldShowDelete = false;
 
@@ -307,8 +284,6 @@ $scope.loginData = $localStorage.getObject('userinfo','{}');
               $scope.favorites = favoriteFactory.getFavorites();
 
               $scope.dishes = dishes;
-
-
 
                 console.log($scope.dishes, $scope.favorites);
 
